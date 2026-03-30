@@ -39,8 +39,8 @@ SELECT
         (
             (monthly_revenue - LAG(monthly_revenue) OVER (ORDER BY month))
             / LAG(monthly_revenue) OVER (ORDER BY month)
-        ) * 100,
-    2) AS growth_percentage
+        ) * 100
+    , 2) AS growth_percentage
 FROM monthly_data
 ORDER BY month;
 
@@ -48,8 +48,8 @@ ORDER BY month;
 -- 4. Average Order Value (AOV)
 SELECT 
     ROUND(
-        SUM(quantity * unit_price) / COUNT(DISTINCT invoice_no),
-    2) AS average_order_value
+        SUM(quantity * unit_price) / COUNT(DISTINCT invoice_no)
+    , 2) AS average_order_value
 FROM online_retail
 WHERE quantity > 0;
 
@@ -58,10 +58,10 @@ WHERE quantity > 0;
 SELECT 
     customer_id,
     ROUND(SUM(quantity * unit_price), 2) AS total_spent
+    RANK() OVER (ORDER BY SUM(quantity * unit_price) DESC) AS customer_rank
 FROM online_retail
 WHERE quantity > 0
 GROUP BY customer_id
-ORDER BY total_spent DESC
 LIMIT 10;
 
 
@@ -79,8 +79,8 @@ SELECT
         SUM(total_spent) /
         (SELECT SUM(quantity * unit_price)
          FROM online_retail
-         WHERE quantity > 0) * 100,
-    2) AS top_10_percentage
+         WHERE quantity > 0) * 100
+    , 2) AS top_10_percentage
 FROM (
     SELECT total_spent
     FROM customer_revenue
