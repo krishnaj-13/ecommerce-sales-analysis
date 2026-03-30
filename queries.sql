@@ -57,7 +57,7 @@ WHERE quantity > 0;
 -- 5. Top 10 Customers by Revenue
 SELECT 
     customer_id,
-    ROUND(SUM(quantity * unit_price), 2) AS total_spent
+    ROUND(SUM(quantity * unit_price), 2) AS total_spent,
     RANK() OVER (ORDER BY SUM(quantity * unit_price) DESC) AS customer_rank
 FROM online_retail
 WHERE quantity > 0
